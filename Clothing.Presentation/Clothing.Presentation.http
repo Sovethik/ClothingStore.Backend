@@ -1,0 +1,6 @@
+@Clothing.Presentation_HostAddress = http://localhost:5195
+
+GET {{Clothing.Presentation_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
