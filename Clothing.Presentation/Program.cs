@@ -2,6 +2,7 @@ using Clothing.Application;
 using Clothing.Application.Interfaces;
 using Clothing.Application.Mappings;
 using Clothing.Infrastrucure;
+using Clothing.Presentation;
 using Clothing.Presentation.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -25,22 +26,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile(new MappingProfile(typeof(IClothingDbContext).Assembly));
 });
 builder.Services.AddInfrastructure(builder.Configuration);
-
-var jwtSettings = builder.Configuration.GetSection("Jwt");
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings["Issuer"],
-            ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!))
-        };
-    });
+builder.Services.AddPresentation(builder.Configuration);
 
 Log.Logger = new LoggerConfiguration().ReadFrom
     .Configuration(builder.Configuration)
